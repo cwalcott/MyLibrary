@@ -22,14 +22,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		02439A0D2EAD677900FC32AC /* MyLibrary */ = {
+		02439A0D2EAD677900FC32AC /* Source */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MyLibrary;
+			path = Source;
 			sourceTree = "<group>";
 		};
-		02439A1B2EAD677B00FC32AC /* MyLibraryTests */ = {
+		02439A1B2EAD677B00FC32AC /* Tests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = MyLibraryTests;
+			path = Tests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -55,8 +55,8 @@
 		02439A022EAD677900FC32AC = {
 			isa = PBXGroup;
 			children = (
-				02439A0D2EAD677900FC32AC /* MyLibrary */,
-				02439A1B2EAD677B00FC32AC /* MyLibraryTests */,
+				02439A0D2EAD677900FC32AC /* Source */,
+				02439A1B2EAD677B00FC32AC /* Tests */,
 				02439A0C2EAD677900FC32AC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -86,7 +86,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				02439A0D2EAD677900FC32AC /* MyLibrary */,
+				02439A0D2EAD677900FC32AC /* Source */,
 			);
 			name = MyLibrary;
 			packageProductDependencies = (
@@ -109,7 +109,7 @@
 				02439A1A2EAD677B00FC32AC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				02439A1B2EAD677B00FC32AC /* MyLibraryTests */,
+				02439A1B2EAD677B00FC32AC /* Tests */,
 			);
 			name = MyLibraryTests;
 			packageProductDependencies = (
