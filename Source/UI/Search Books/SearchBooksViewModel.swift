@@ -29,9 +29,9 @@ let MOCK_BOOKS = [
 @MainActor
 final class SearchBooksViewModel: ObservableObject {
     @Published var searchQuery: String = ""
-    @Published var books: [OpenLibraryBook] = MOCK_BOOKS
+    @Published var books: [OpenLibraryBook] = []
 
-    init() {
+    init(openLibraryAPIClient: OpenLibraryAPIClient) {
         $searchQuery
             .removeDuplicates()
             .map { query in

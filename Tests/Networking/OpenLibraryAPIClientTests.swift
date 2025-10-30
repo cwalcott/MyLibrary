@@ -3,15 +3,15 @@ import Testing
 @testable import MyLibrary
 
 @MainActor
-struct LiveOpenLibraryAPIClientTests {
-    private let client: LiveOpenLibraryAPIClient
+struct OpenLibraryAPIClientTests {
+    private let client: OpenLibraryAPIClient
     private let urlSession: URLSession
 
     init() {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
         urlSession = URLSession(configuration: config)
-        client = LiveOpenLibraryAPIClient(urlSession: urlSession)
+        client = OpenLibraryAPIClient(urlSession: urlSession)
     }
 
     @Test func searchSuccess() async throws {
