@@ -2,23 +2,17 @@ import Foundation
 import SwiftUI
 
 class Composer {
-    let urlSession: URLSession
+    let openLibraryAPIClient: OpenLibraryAPIClient
 
-    static let live: Composer = Composer(urlSession: .shared)
-
-    static let preview: Composer = {
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.protocolClasses = [MockURLProtocol.self]
-        return Composer(urlSession: .init(configuration: configuration))
-    }()
-
-    init(urlSession: URLSession) {
-        self.urlSession = urlSession
+    init(openLibraryAPIClient: OpenLibraryAPIClient) {
+        self.openLibraryAPIClient = openLibraryAPIClient
     }
 
-    func makeOpenLibraryAPIClient() -> OpenLibraryAPIClient {
-        return OpenLibraryAPIClient(urlSession: urlSession)
-    }
+    static let live: Composer = Composer(
+        openLibraryAPIClient: LiveOpenLibraryAPIClient(urlSession: .shared)
+    )
+
+    static let preview: Composer = Composer(openLibraryAPIClient: FakeOpenLibraryAPIClient())
 }
 
 extension EnvironmentValues {

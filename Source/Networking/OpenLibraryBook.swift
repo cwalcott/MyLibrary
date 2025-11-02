@@ -1,4 +1,4 @@
-struct OpenLibraryBook: Decodable, Equatable, Identifiable {
+struct OpenLibraryBook: Codable, Equatable, Identifiable {
     var authorName: [String]?
     var coverEditionKey: String?
     var key: String

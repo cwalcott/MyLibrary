@@ -27,7 +27,7 @@ struct SearchBooksScreen: View {
     NavigationView {
         SearchBooksScreen(
             viewModel: SearchBooksViewModel(
-                openLibraryAPIClient: composer.makeOpenLibraryAPIClient()
+                openLibraryAPIClient: composer.openLibraryAPIClient
             )
         )
     }

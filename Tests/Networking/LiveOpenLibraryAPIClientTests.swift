@@ -3,6 +3,7 @@ import Testing
 @testable import MyLibrary
 
 @MainActor
+@Suite(.serialized)
 struct OpenLibraryAPIClientTests {
     private let client: OpenLibraryAPIClient
     private let urlSession: URLSession
@@ -11,7 +12,7 @@ struct OpenLibraryAPIClientTests {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [MockURLProtocol.self]
         urlSession = URLSession(configuration: config)
-        client = OpenLibraryAPIClient(urlSession: urlSession)
+        client = LiveOpenLibraryAPIClient(urlSession: urlSession)
     }
 
     @Test func searchSuccess() async throws {

@@ -1,47 +1,41 @@
 import Combine
-
-let MOCK_BOOKS = [
-    OpenLibraryBook(
-        authorName: ["J.R.R. Tolkien"],
-        coverEditionKey: "OL51711263M",
-        key: "/works/OL27482W",
-        title: "The Hobbit"
-    ),
-    OpenLibraryBook(
-        authorName: ["J.R.R. Tolkien"],
-        coverEditionKey: "OL51708686M",
-        key: "/works/OL27513W",
-        title: "The Fellowship of the Ring"
-    ),
-    OpenLibraryBook(
-        authorName: ["Isaac Asimov"],
-        coverEditionKey: "OL51565403M",
-        key: "/works/OL46125W",
-        title: "Foundation"
-    ),
-    OpenLibraryBook(
-        authorName: ["Frank Herbert"],
-        key: "/works/OL893415W",
-        title: "Dune"
-    ),
-]
+import Foundation
 
 @MainActor
 final class SearchBooksViewModel: ObservableObject {
     @Published var searchQuery: String = ""
     @Published var books: [OpenLibraryBook] = []
 
-    init(openLibraryAPIClient: OpenLibraryAPIClient) {
-        $searchQuery
-            .removeDuplicates()
-            .map { query in
-                guard !query.isEmpty else { return MOCK_BOOKS }
+    private let openLibraryAPIClient: OpenLibraryAPIClient
+    private var cancellables = Set<AnyCancellable>()
+    private var searchTask: Task<Void, Never>?
 
-                return MOCK_BOOKS.filter { book in
-                    book.title.contains(query) ||
-                        (book.authorName ?? []).contains(where: { $0.contains(query) })
-                }
+    init(openLibraryAPIClient: OpenLibraryAPIClient) {
+        self.openLibraryAPIClient = openLibraryAPIClient
+
+        $searchQuery
+            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .sink { [weak self] query in self?.performSearch(query) }
+            .store(in: &cancellables)
+    }
+
+    private func performSearch(_ query: String) {
+        searchTask?.cancel()
+
+        guard !query.isEmpty else {
+            books = []
+            return
+        }
+
+        searchTask = Task {
+            do {
+                print("Searching for: \(query)")
+                books = try await openLibraryAPIClient.search(query)
+            } catch {
+                print("Search error: \(error)")
+                books = []
             }
-            .assign(to: &$books)
+        }
     }
 }

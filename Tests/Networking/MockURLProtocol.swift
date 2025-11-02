@@ -1,4 +1,5 @@
 import Foundation
+@testable import MyLibrary
 
 class MockURLProtocol: URLProtocol {
     static var mockResponseData: Data?
@@ -35,3 +36,29 @@ class MockURLProtocol: URLProtocol {
 
     override func stopLoading() {}
 }
+
+let MOCK_BOOKS = [
+    OpenLibraryBook(
+        authorName: ["J.R.R. Tolkien"],
+        coverEditionKey: "OL51711263M",
+        key: "/works/OL27482W",
+        title: "The Hobbit"
+    ),
+    OpenLibraryBook(
+        authorName: ["J.R.R. Tolkien"],
+        coverEditionKey: "OL51708686M",
+        key: "/works/OL27513W",
+        title: "The Fellowship of the Ring"
+    ),
+    OpenLibraryBook(
+        authorName: ["Isaac Asimov"],
+        coverEditionKey: "OL51565403M",
+        key: "/works/OL46125W",
+        title: "Foundation"
+    ),
+    OpenLibraryBook(
+        authorName: ["Frank Herbert"],
+        key: "/works/OL893415W",
+        title: "Dune"
+    ),
+]
