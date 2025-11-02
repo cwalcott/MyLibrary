@@ -7,11 +7,7 @@ struct MyLibraryApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                SearchBooksScreen(
-                    viewModel: SearchBooksViewModel(
-                        openLibraryAPIClient: composer.openLibraryAPIClient
-                    )
-                )
+                SearchBooksScreen(viewModel: composer.makeSearchBooksViewModel())
             }
         }
     }

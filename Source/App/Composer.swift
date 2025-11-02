@@ -1,18 +1,26 @@
+import CombineSchedulers
 import Foundation
 import SwiftUI
 
 class Composer {
+    static let live: Composer = Composer(
+        openLibraryAPIClient: LiveOpenLibraryAPIClient(urlSession: .shared)
+    )
+
+    static let preview: Composer = Composer(openLibraryAPIClient: FakeOpenLibraryAPIClient())
+
     let openLibraryAPIClient: OpenLibraryAPIClient
 
     init(openLibraryAPIClient: OpenLibraryAPIClient) {
         self.openLibraryAPIClient = openLibraryAPIClient
     }
 
-    static let live: Composer = Composer(
-        openLibraryAPIClient: LiveOpenLibraryAPIClient(urlSession: .shared)
-    )
-
-    static let preview: Composer = Composer(openLibraryAPIClient: FakeOpenLibraryAPIClient())
+    @MainActor
+    func makeSearchBooksViewModel() -> SearchBooksViewModel {
+        return SearchBooksViewModel(
+            openLibraryAPIClient: openLibraryAPIClient, mainScheduler: .main
+        )
+    }
 }
 
 extension EnvironmentValues {

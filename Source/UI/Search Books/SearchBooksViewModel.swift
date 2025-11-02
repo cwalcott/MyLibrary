@@ -1,4 +1,5 @@
 import Combine
+import CombineSchedulers
 import Foundation
 
 @MainActor
@@ -10,11 +11,14 @@ final class SearchBooksViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     private var searchTask: Task<Void, Never>?
 
-    init(openLibraryAPIClient: OpenLibraryAPIClient) {
+    init(
+        openLibraryAPIClient: OpenLibraryAPIClient,
+        mainScheduler: AnySchedulerOf<DispatchQueue>
+    ) {
         self.openLibraryAPIClient = openLibraryAPIClient
 
         $searchQuery
-            .debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+            .debounce(for: .seconds(0.5), scheduler: mainScheduler)
             .removeDuplicates()
             .sink { [weak self] query in self?.performSearch(query) }
             .store(in: &cancellables)

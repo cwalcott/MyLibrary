@@ -25,10 +25,6 @@ struct SearchBooksScreen: View {
     @Previewable @Environment(\.composer) var composer
 
     NavigationView {
-        SearchBooksScreen(
-            viewModel: SearchBooksViewModel(
-                openLibraryAPIClient: composer.openLibraryAPIClient
-            )
-        )
+        SearchBooksScreen(viewModel: composer.makeSearchBooksViewModel())
     }
 }
