@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		021150082EB7E19B008187F8 /* CombineSchedulers in Frameworks */ = {isa = PBXBuildFile; productRef = 021150072EB7E19B008187F8 /* CombineSchedulers */; };
+		027BC5CD2EC14DEF001BAB9B /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = 027BC5CC2EC14DEF001BAB9B /* GRDB */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				021150082EB7E19B008187F8 /* CombineSchedulers in Frameworks */,
+				027BC5CD2EC14DEF001BAB9B /* GRDB in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,6 +98,7 @@
 			name = MyLibrary;
 			packageProductDependencies = (
 				021150072EB7E19B008187F8 /* CombineSchedulers */,
+				027BC5CC2EC14DEF001BAB9B /* GRDB */,
 			);
 			productName = MyLibrary;
 			productReference = 02439A0B2EAD677900FC32AC /* MyLibrary.app */;
@@ -154,6 +157,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				021150062EB7E159008187F8 /* XCRemoteSwiftPackageReference "combine-schedulers" */,
+				027BC5CB2EC14DEF001BAB9B /* XCRemoteSwiftPackageReference "GRDB" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 02439A0C2EAD677900FC32AC /* Products */;
@@ -479,6 +483,14 @@
 				minimumVersion = 1.0.3;
 			};
 		};
+		027BC5CB2EC14DEF001BAB9B /* XCRemoteSwiftPackageReference "GRDB" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/groue/GRDB.swift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.8.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -486,6 +498,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 021150062EB7E159008187F8 /* XCRemoteSwiftPackageReference "combine-schedulers" */;
 			productName = CombineSchedulers;
+		};
+		027BC5CC2EC14DEF001BAB9B /* GRDB */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 027BC5CB2EC14DEF001BAB9B /* XCRemoteSwiftPackageReference "GRDB" */;
+			productName = GRDB;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
