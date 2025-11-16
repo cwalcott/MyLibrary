@@ -16,15 +16,17 @@ struct SearchBooksScreen: View {
                 }
             }
         }
-        .navigationTitle("Books")
+        .navigationTitle("Search Books")
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $viewModel.searchQuery, isPresented: $searchIsActive)
+        .searchPresentationToolbarBehavior(.avoidHidingContent)
     }
 }
 
 #Preview {
     @Previewable @Environment(\.composer) var composer
 
-    NavigationView {
+    NavigationStack {
         SearchBooksScreen(viewModel: composer.makeSearchBooksViewModel())
     }
 }

@@ -16,6 +16,11 @@ class Composer {
     }
 
     @MainActor
+    func makeFavoritesViewModel() -> FavoritesViewModel {
+        return FavoritesViewModel()
+    }
+
+    @MainActor
     func makeSearchBooksViewModel() -> SearchBooksViewModel {
         return SearchBooksViewModel(
             openLibraryAPIClient: openLibraryAPIClient, mainScheduler: .main

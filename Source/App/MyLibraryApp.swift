@@ -6,8 +6,8 @@ struct MyLibraryApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                SearchBooksScreen(viewModel: composer.makeSearchBooksViewModel())
+            NavigationStack {
+                FavoritesScreen(viewModel: composer.makeFavoritesViewModel())
             }
         }
     }
