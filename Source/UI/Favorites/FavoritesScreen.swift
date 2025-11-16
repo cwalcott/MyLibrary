@@ -3,8 +3,6 @@ import SwiftUI
 struct FavoritesScreen: View {
     @StateObject var viewModel: FavoritesViewModel
 
-    @State private var showingSearch = false
-
     @Environment(\.composer) private var composer
 
     var body: some View {
@@ -21,26 +19,10 @@ struct FavoritesScreen: View {
         }
         .navigationTitle("Favorite Books")
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showingSearch = true
-                } label: {
-                    Image(systemName: "plus")
-                }
-            }
-        }
-        .sheet(isPresented: $showingSearch) {
-            NavigationStack {
+            NavigationLink {
                 SearchBooksScreen(viewModel: composer.makeSearchBooksViewModel())
-                    .toolbar {
-                        ToolbarItem(placement: .topBarTrailing) {
-                            Button {
-                                showingSearch = false
-                            } label: {
-                                Image(systemName: "xmark")
-                            }
-                        }
-                    }
+            } label: {
+                Image(systemName: "plus")
             }
         }
     }
