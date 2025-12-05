@@ -16,6 +16,13 @@ class Composer {
     }
 
     @MainActor
+    func makeBookDetailsViewModel(openLibraryKey: String) -> BookDetailsViewModel {
+        return BookDetailsViewModel(
+            openLibraryAPIClient: openLibraryAPIClient, openLibraryKey: openLibraryKey
+        )
+    }
+
+    @MainActor
     func makeFavoritesViewModel() -> FavoritesViewModel {
         return FavoritesViewModel()
     }

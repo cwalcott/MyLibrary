@@ -1,6 +1,7 @@
 import Foundation
 
 protocol OpenLibraryAPIClient {
+    func getBook(_ key: String) async throws -> OpenLibraryBook?
     func search(_ query: String) async throws -> [OpenLibraryBook]
 }
 

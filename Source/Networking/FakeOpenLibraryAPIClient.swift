@@ -1,4 +1,8 @@
 final class FakeOpenLibraryAPIClient: OpenLibraryAPIClient {
+    func getBook(_ key: String) async throws -> OpenLibraryBook? {
+        return MOCK_BOOKS.first(where: { $0.key == key })
+    }
+
     func search(_ query: String) async throws -> [OpenLibraryBook] {
         guard !query.isEmpty else {
             return MOCK_BOOKS

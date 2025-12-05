@@ -13,7 +13,16 @@ final class LiveOpenLibraryAPIClient: OpenLibraryAPIClient {
         self.urlSession = urlSession
     }
 
+    func getBook(_ key: String) async throws -> OpenLibraryBook? {
+        let docs = try await performSearch(query: "key:\(key)")
+        return docs.first
+    }
+
     func search(_ query: String) async throws -> [OpenLibraryBook] {
+        return try await performSearch(query: query)
+    }
+
+    private func performSearch(query: String) async throws -> [OpenLibraryBook] {
         guard var components = URLComponents(string: "https://openlibrary.org/search.json") else {
             throw APIError.invalidURL
         }
