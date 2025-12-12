@@ -1,24 +1,40 @@
 import CombineSchedulers
 import Foundation
+import GRDB
 import SwiftUI
 
 class Composer {
-    static let live: Composer = Composer(
-        openLibraryAPIClient: LiveOpenLibraryAPIClient(urlSession: .shared)
-    )
+    static let live: Composer = {
+        return Composer(
+            database: try! AppDatabase.fromFile(named: "db.sqlite"),
+            openLibraryAPIClient: LiveOpenLibraryAPIClient(urlSession: .shared)
+        )
+    }()
 
-    static let preview: Composer = Composer(openLibraryAPIClient: FakeOpenLibraryAPIClient())
+    static let preview: Composer = {
+        let database = try! AppDatabase(dbQueue: DatabaseQueue())
+        database.books().insert(MOCK_BOOKS[0].asBook())
 
+        return Composer(
+            database: database,
+            openLibraryAPIClient: FakeOpenLibraryAPIClient()
+        )
+    }()
+
+    let database: AppDatabase
     let openLibraryAPIClient: OpenLibraryAPIClient
 
-    init(openLibraryAPIClient: OpenLibraryAPIClient) {
+    init(database: AppDatabase, openLibraryAPIClient: OpenLibraryAPIClient) {
+        self.database = database
         self.openLibraryAPIClient = openLibraryAPIClient
     }
 
     @MainActor
     func makeBookDetailsViewModel(openLibraryKey: String) -> BookDetailsViewModel {
         return BookDetailsViewModel(
-            openLibraryAPIClient: openLibraryAPIClient, openLibraryKey: openLibraryKey
+            database: database,
+            openLibraryAPIClient: openLibraryAPIClient,
+            openLibraryKey: openLibraryKey
         )
     }
 

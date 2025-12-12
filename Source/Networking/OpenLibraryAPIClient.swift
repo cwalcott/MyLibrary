@@ -21,4 +21,12 @@ struct OpenLibraryBook: Codable, Equatable, Identifiable {
         case key
         case title
     }
+
+    func asBook() -> Book {
+        return Book(
+            authorNames: authorName?.joined(separator: ", "),
+            openLibraryKey: key,
+            title: title
+        )
+    }
 }

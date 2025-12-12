@@ -2,7 +2,13 @@ import Foundation
 import GRDB
 
 struct Book: Codable, Identifiable, FetchableRecord, PersistableRecord {
-    var author: String?
+    static let databaseTableName = "books"
+
+    enum Columns: String, ColumnExpression {
+        case openLibraryKey
+    }
+
+    var authorNames: String?
     var openLibraryKey: String
     var title: String
     var uuid = UUID()

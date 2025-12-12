@@ -23,6 +23,10 @@ final class AppDatabase {
 
         try migrate(dbQueue: dbQueue)
     }
+
+    func books() -> BookDAO {
+        return BookDAO(dbQueue: dbQueue)
+    }
 }
 
 private func migrate(dbQueue: DatabaseQueue) throws {
@@ -30,10 +34,12 @@ private func migrate(dbQueue: DatabaseQueue) throws {
 
     migrator.registerMigration("v1") { db in
         try db.create(table: "books") { t in
-            t.column("author", .text)
+            t.column("authorNames", .text)
             t.column("openLibraryKey", .text).notNull()
             t.column("title", .text).notNull()
             t.column("uuid", .text).notNull().primaryKey()
         }
     }
+
+    try migrator.migrate(dbQueue)
 }

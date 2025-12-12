@@ -11,8 +11,8 @@ struct FavoritesScreen: View {
                 Text(book.title)
                     .font(.headline)
 
-                if let author = book.author {
-                    Text(author)
+                if let authors = book.authorNames {
+                    Text(authors)
                         .font(.subheadline)
                 }
             }
