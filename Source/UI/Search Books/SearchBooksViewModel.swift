@@ -34,7 +34,6 @@ final class SearchBooksViewModel: ObservableObject {
 
         searchTask = Task {
             do {
-                print("Searching for: \(query)")
                 books = try await openLibraryAPIClient.search(query)
             } catch {
                 print("Search error: \(error)")

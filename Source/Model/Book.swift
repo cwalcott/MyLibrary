@@ -1,13 +1,6 @@
 import Foundation
-import GRDB
 
-struct Book: Codable, Identifiable, FetchableRecord, PersistableRecord {
-    static let databaseTableName = "books"
-
-    enum Columns: String, ColumnExpression {
-        case openLibraryKey
-    }
-
+struct Book: Codable, Equatable, Identifiable {
     var authorNames: String?
     var openLibraryKey: String
     var title: String

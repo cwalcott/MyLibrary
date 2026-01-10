@@ -14,7 +14,6 @@ final class BookDetailsViewModel: ObservableObject {
     private let openLibraryAPIClient: OpenLibraryAPIClient
     private let openLibraryKey: String
 
-    private var isFavorite = false
     private var openLibraryBook: OpenLibraryBook?
 
     init(
@@ -25,17 +24,12 @@ final class BookDetailsViewModel: ObservableObject {
         self.database = database
         self.openLibraryAPIClient = openLibraryAPIClient
         self.openLibraryKey = openLibraryKey
-
-        if database.books().findByOpenLibraryKey(openLibraryKey) != nil {
-            isFavorite = true
-        }
     }
 
     func addToFavorites() {
-        if let openLibraryBook = self.openLibraryBook, !isFavorite {
+        if let openLibraryBook, let state, !state.isFavorite {
             database.books().insert(openLibraryBook.asBook())
 
-            isFavorite = true
             self.state?.isFavorite = true
         }
     }
@@ -46,7 +40,7 @@ final class BookDetailsViewModel: ObservableObject {
                 self.openLibraryBook = book
                 self.state = BookDetailsUIState(
                     authorNames: book.authorName?.joined(separator: ","),
-                    isFavorite: isFavorite,
+                    isFavorite: database.books().findByOpenLibraryKey(openLibraryKey) != nil,
                     title: book.title
                 )
             } else {
@@ -55,17 +49,16 @@ final class BookDetailsViewModel: ObservableObject {
             }
         } catch {
             // TODO: improve error handling
-            print("Failed to fetch book: \(error)")
+            print("Failed to fetch book: 1\(error)")
             self.openLibraryBook = nil
             self.state = nil
         }
     }
 
     func removeFromFavorites() {
-        if isFavorite {
+        if let state, state.isFavorite {
             database.books().deleteByOpenLibraryKey(openLibraryKey)
 
-            isFavorite = false
             self.state?.isFavorite = false
         }
     }

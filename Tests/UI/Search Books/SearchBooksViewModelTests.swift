@@ -5,7 +5,7 @@ import Testing
 @testable import MyLibrary
 
 @MainActor
-struct SearchBooksViewModelTest {
+struct SearchBooksViewModelTests {
     private let openLibraryAPIClient = FakeOpenLibraryAPIClient()
     private let testScheduler: TestSchedulerOf<DispatchQueue> = DispatchQueue.test
 
