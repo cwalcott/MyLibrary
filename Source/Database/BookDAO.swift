@@ -8,8 +8,8 @@ final class BookDAO {
         self.dbQueue = dbQueue
     }
 
-    func deleteByOpenLibraryKey(_ openLibraryKey: String) {
-        _ = try! dbQueue.write { db in
+    func deleteByOpenLibraryKey(_ openLibraryKey: String) throws {
+        _ = try dbQueue.write { db in
             try Book.filter(Book.Columns.openLibraryKey == openLibraryKey).deleteAll(db)
         }
     }
@@ -20,8 +20,8 @@ final class BookDAO {
         }
     }
 
-    func insert(_ book: Book) {
-        try! dbQueue.write { db in
+    func insert(_ book: Book) throws {
+        try dbQueue.write { db in
             try book.insert(db)
         }
     }
@@ -30,7 +30,10 @@ final class BookDAO {
         return ValueObservation
             .tracking { db in try Book.fetchAll(db) }
             .publisher(in: dbQueue)
-            .replaceError(with: [])
+            .catch { error -> Just<[Book]> in
+                print("Database error in streamAll: \(error)")
+                return Just([])
+            }
             .removeDuplicates()
     }
 }

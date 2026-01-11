@@ -11,15 +11,17 @@ class Composer {
         )
     }()
 
-    static let preview: Composer = {
+    static func preview(apply: ((Composer) -> Void)? = nil) -> Composer {
         let database = try! AppDatabase(dbQueue: DatabaseQueue())
-        database.books().insert(MOCK_BOOKS[0].asBook())
+        try! database.books().insert(MOCK_BOOKS[0].asBook())
 
-        return Composer(
+        let composer = Composer(
             database: database,
             openLibraryAPIClient: FakeOpenLibraryAPIClient()
         )
-    }()
+        apply?(composer)
+        return composer
+    }
 
     let database: AppDatabase
     let openLibraryAPIClient: OpenLibraryAPIClient
@@ -54,7 +56,7 @@ class Composer {
 extension EnvironmentValues {
     @Entry var composer: Composer = {
         if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
-            return .preview
+            return .preview()
         } else {
             return .live
         }

@@ -4,7 +4,7 @@ import Testing
 
 @MainActor
 struct BookDetailsViewModelTests {
-    private let database = try! AppDatabase(dbQueue: try! DatabaseQueue())
+    private var database = try! AppDatabase(dbQueue: try! DatabaseQueue())
     private let openLibraryAPIClient = FakeOpenLibraryAPIClient()
 
     private let book = Book(
@@ -23,6 +23,19 @@ struct BookDetailsViewModelTests {
         #expect(viewModel.state?.isFavorite == true)
     }
 
+    @Test func addToFavorites_dbError() async throws {
+        let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
+        await viewModel.loadBook()
+        try await database.dbQueue.write { db in
+            try db.execute(sql: "DROP TABLE books")
+        }
+
+        viewModel.addToFavorites()
+
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.state?.isFavorite != true)
+    }
+
     @Test func loadBook_notFavorite() async throws {
         let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
 
@@ -38,7 +51,7 @@ struct BookDetailsViewModelTests {
     }
 
     @Test func loadBook_favorite() async throws {
-        database.books().insert(book)
+        try database.books().insert(book)
         let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
 
         await viewModel.loadBook()
@@ -52,8 +65,8 @@ struct BookDetailsViewModelTests {
         )
     }
 
-    @Test func removeFromFavorites() async {
-        database.books().insert(book)
+    @Test func removeFromFavorites() async throws {
+        try database.books().insert(book)
         let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
         await viewModel.loadBook()
 
@@ -61,6 +74,20 @@ struct BookDetailsViewModelTests {
 
         #expect(database.books().findByOpenLibraryKey(book.openLibraryKey) == nil)
         #expect(viewModel.state?.isFavorite == false)
+    }
+
+    @Test func removeFromFavorites_dbError() async throws {
+        try database.books().insert(book)
+        let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
+        await viewModel.loadBook()
+        try await database.dbQueue.write { db in
+            try db.execute(sql: "DROP TABLE books")
+        }
+
+        viewModel.removeFromFavorites()
+
+        #expect(viewModel.errorMessage != nil)
+        #expect(viewModel.state?.isFavorite == true)
     }
 
     private func createViewModel(openLibraryKey: String) -> BookDetailsViewModel {

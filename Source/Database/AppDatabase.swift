@@ -2,7 +2,7 @@ import Foundation
 import GRDB
 
 final class AppDatabase {
-    private let dbQueue: DatabaseQueue
+    let dbQueue: DatabaseQueue
 
     static func fromFile(named name: String) throws -> AppDatabase {
         let databaseURL = try FileManager.default.url(
@@ -18,10 +18,10 @@ final class AppDatabase {
         )
     }
 
-    init(dbQueue: DatabaseQueue) throws {
-        self.dbQueue = dbQueue
+    init(dbQueue: DatabaseQueue? = nil) throws {
+        self.dbQueue = try dbQueue ?? DatabaseQueue()
 
-        try migrate(dbQueue: dbQueue)
+        try migrate(dbQueue: self.dbQueue)
     }
 
     func books() -> BookDAO {

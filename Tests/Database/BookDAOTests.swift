@@ -24,7 +24,7 @@ struct BookDAOTests {
             try book.insert(db)
         }
 
-        bookDao.deleteByOpenLibraryKey(book.openLibraryKey)
+        try bookDao.deleteByOpenLibraryKey(book.openLibraryKey)
 
         try dbQueue.read { db in
             try #expect(Book.fetchOne(db, key: book.uuid) == nil)
@@ -41,7 +41,7 @@ struct BookDAOTests {
     }
 
     @Test func insert() throws {
-        bookDao.insert(book)
+        try bookDao.insert(book)
 
         try dbQueue.read { db in
             try #expect(Book.fetchOne(db, key: book.uuid) == book)

@@ -9,6 +9,7 @@ struct BookDetailsUIState: Equatable {
 @MainActor
 final class BookDetailsViewModel: ObservableObject {
     @Published var state: BookDetailsUIState?
+    @Published var errorMessage: String?
 
     private let database: AppDatabase
     private let openLibraryAPIClient: OpenLibraryAPIClient
@@ -27,10 +28,15 @@ final class BookDetailsViewModel: ObservableObject {
     }
 
     func addToFavorites() {
-        if let openLibraryBook, let state, !state.isFavorite {
-            database.books().insert(openLibraryBook.asBook())
+        guard let openLibraryBook, let state, !state.isFavorite else {
+            return
+        }
 
+        do {
+            try database.books().insert(openLibraryBook.asBook())
             self.state?.isFavorite = true
+        } catch {
+            errorMessage = "Failed to add to favorites"
         }
     }
 
@@ -49,17 +55,22 @@ final class BookDetailsViewModel: ObservableObject {
             }
         } catch {
             // TODO: improve error handling
-            print("Failed to fetch book: 1\(error)")
+            print("Failed to fetch book: \(error)")
             self.openLibraryBook = nil
             self.state = nil
         }
     }
 
     func removeFromFavorites() {
-        if let state, state.isFavorite {
-            database.books().deleteByOpenLibraryKey(openLibraryKey)
+        guard let state, state.isFavorite else {
+            return
+        }
 
+        do {
+            try database.books().deleteByOpenLibraryKey(openLibraryKey)
             self.state?.isFavorite = false
+        } catch {
+            errorMessage = "Failed to remove from favorites"
         }
     }
 }

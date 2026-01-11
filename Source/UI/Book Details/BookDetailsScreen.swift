@@ -1,3 +1,4 @@
+import GRDB
 import SwiftUI
 
 struct BookDetailsScreen: View {
@@ -34,18 +35,51 @@ struct BookDetailsScreen: View {
                 Text("Loading...")
             }
         }
+        .alert(
+            viewModel.errorMessage ?? "",
+            isPresented: .constant(viewModel.errorMessage != nil)
+        ) {
+            Button("OK") {
+                viewModel.errorMessage = nil
+            }
+        }
         .task {
             await viewModel.loadBook()
         }
     }
 }
 
-#Preview {
+#Preview("Favorite") {
     @Previewable @Environment(\.composer) var composer
 
     NavigationStack {
         BookDetailsScreen(
             viewModel: composer.makeBookDetailsViewModel(openLibraryKey: "/works/OL27482W")
         )
+    }
+}
+
+#Preview("Not favorite") {
+    @Previewable @Environment(\.composer) var composer
+
+    NavigationStack {
+        BookDetailsScreen(
+            viewModel: composer.makeBookDetailsViewModel(openLibraryKey: "/works/OL27513W")
+        )
+    }
+}
+
+#Preview("DB Error") {
+    let composer = Composer.preview {
+        try! $0.database.dbQueue.write { db in
+            try db.execute(sql: "DROP TABLE books")
+        }
+    }
+
+    NavigationStack {
+        BookDetailsScreen(
+            viewModel: composer.makeBookDetailsViewModel(openLibraryKey: "/works/OL27513W")
+        )
+        .environment(\.composer, composer)
     }
 }

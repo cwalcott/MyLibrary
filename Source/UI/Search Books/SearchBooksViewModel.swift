@@ -36,6 +36,7 @@ final class SearchBooksViewModel: ObservableObject {
             do {
                 books = try await openLibraryAPIClient.search(query)
             } catch {
+                // TODO: improve error handling
                 print("Search error: \(error)")
                 books = []
             }

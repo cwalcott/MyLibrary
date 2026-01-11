@@ -21,14 +21,14 @@ struct FavoritesViewModelTests {
     ]
 
     @Test func streamsAllBooksAsFavorites() async throws {
-        books.forEach { database.books().insert($0) }
+        try books.forEach { try database.books().insert($0) }
         let viewModel = createViewModel()
         var booksStream = viewModel.$books.values.makeAsyncIterator()
 
         #expect(await booksStream.next() == [])
         #expect(await booksStream.next() == books)
 
-        database.books().deleteByOpenLibraryKey(books[1].openLibraryKey)
+        try database.books().deleteByOpenLibraryKey(books[1].openLibraryKey)
         #expect(await booksStream.next() == [books[0]])
     }
 
