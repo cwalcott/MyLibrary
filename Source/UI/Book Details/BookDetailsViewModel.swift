@@ -10,6 +10,7 @@ struct BookDetailsUIState: Equatable {
 final class BookDetailsViewModel: ObservableObject {
     @Published var state: BookDetailsUIState?
     @Published var errorMessage: String?
+    @Published var loadErrorMessage: String?
 
     private let database: AppDatabase
     private let openLibraryAPIClient: OpenLibraryAPIClient
@@ -52,12 +53,23 @@ final class BookDetailsViewModel: ObservableObject {
             } else {
                 self.openLibraryBook = nil
                 self.state = nil
+                self.loadErrorMessage = "Book not found"
             }
         } catch {
-            // TODO: improve error handling
             print("Failed to fetch book: \(error)")
             self.openLibraryBook = nil
-            self.state = nil
+
+            if let localBook = database.books().findByOpenLibraryKey(openLibraryKey) {
+                self.state = BookDetailsUIState(
+                    authorNames: localBook.authorNames,
+                    isFavorite: true,
+                    title: localBook.title
+                )
+                self.loadErrorMessage = "Showing offline data. Check your connection."
+            } else {
+                self.state = nil
+                self.loadErrorMessage = "Unable to load book. Check your connection."
+            }
         }
     }
 

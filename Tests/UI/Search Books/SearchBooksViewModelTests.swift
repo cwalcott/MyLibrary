@@ -19,6 +19,23 @@ struct SearchBooksViewModelTests {
         #expect(viewModel.books.allSatisfy { ($0.authorName?.first ?? "").contains("Tolkien") })
     }
 
+    @Test func searchBooks_error() async {
+        let viewModel = createViewModel()
+
+        openLibraryAPIClient.networkErrors = true
+        viewModel.searchQuery = "Tolkien"
+        await testScheduler.run()
+
+        #expect(viewModel.books.isEmpty)
+        #expect(viewModel.errorMessage != nil)
+
+        openLibraryAPIClient.networkErrors = false
+        viewModel.performSearch(viewModel.searchQuery)
+        await testScheduler.run()
+
+        #expect(viewModel.books.count == 2)
+    }
+
     @Test func searchBooks_debouncesQuery() async {
         let viewModel = createViewModel()
         #expect(viewModel.books.isEmpty)

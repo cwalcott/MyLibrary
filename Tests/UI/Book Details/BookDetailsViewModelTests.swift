@@ -50,6 +50,16 @@ struct BookDetailsViewModelTests {
         )
     }
 
+    @Test func loadBook_notFavorite_networkError() async throws {
+        let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
+        openLibraryAPIClient.networkErrors = true
+
+        await viewModel.loadBook()
+
+        #expect(viewModel.state == nil)
+        #expect(viewModel.loadErrorMessage != nil)
+    }
+
     @Test func loadBook_favorite() async throws {
         try database.books().insert(book)
         let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
@@ -63,6 +73,23 @@ struct BookDetailsViewModelTests {
                 title: book.title
             )
         )
+    }
+
+    @Test func loadBook_favorite_networkError() async throws {
+        try database.books().insert(book)
+        let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
+        openLibraryAPIClient.networkErrors = true
+
+        await viewModel.loadBook()
+
+        #expect(
+            viewModel.state == BookDetailsUIState(
+                authorNames: book.authorNames,
+                isFavorite: true,
+                title: book.title
+            )
+        )
+        #expect(viewModel.loadErrorMessage != nil)
     }
 
     @Test func removeFromFavorites() async throws {

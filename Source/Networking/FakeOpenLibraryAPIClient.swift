@@ -1,9 +1,21 @@
+
+
 final class FakeOpenLibraryAPIClient: OpenLibraryAPIClient {
+    var networkErrors = false
+
     func getBook(_ key: String) async throws -> OpenLibraryBook? {
+        if networkErrors {
+            throw APIError.invalidResponse
+        }
+
         return MOCK_BOOKS.first(where: { $0.key == key })
     }
 
     func search(_ query: String) async throws -> [OpenLibraryBook] {
+        if networkErrors {
+            throw APIError.invalidResponse
+        }
+
         guard !query.isEmpty else {
             return MOCK_BOOKS
         }
