@@ -40,7 +40,7 @@ class Composer {
 
     @MainActor
     func makeFavoritesViewModel() -> FavoritesViewModel {
-        return FavoritesViewModel()
+        return FavoritesViewModel(database: database)
     }
 
     @MainActor

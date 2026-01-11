@@ -1,3 +1,4 @@
+import Combine
 import GRDB
 
 final class BookDAO {
@@ -23,5 +24,13 @@ final class BookDAO {
         try! dbQueue.write { db in
             try book.insert(db)
         }
+    }
+
+    func streamAll() -> some Publisher<[Book], Never> {
+        return ValueObservation
+            .tracking { db in try Book.fetchAll(db) }
+            .publisher(in: dbQueue)
+            .replaceError(with: [])
+            .removeDuplicates()
     }
 }

@@ -7,13 +7,21 @@ struct FavoritesScreen: View {
 
     var body: some View {
         List(viewModel.books) { book in
-            VStack(alignment: .leading) {
-                Text(book.title)
-                    .font(.headline)
+            NavigationLink {
+                BookDetailsScreen(
+                    viewModel: composer.makeBookDetailsViewModel(
+                        openLibraryKey: book.openLibraryKey
+                    )
+                )
+            } label: {
+                VStack(alignment: .leading) {
+                    Text(book.title)
+                        .font(.headline)
 
-                if let authors = book.authorNames {
-                    Text(authors)
-                        .font(.subheadline)
+                    if let authors = book.authorNames {
+                        Text(authors)
+                            .font(.subheadline)
+                    }
                 }
             }
         }
