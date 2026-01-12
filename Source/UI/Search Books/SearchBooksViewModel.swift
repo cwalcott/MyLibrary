@@ -5,7 +5,7 @@ import Foundation
 @MainActor
 final class SearchBooksViewModel: ObservableObject {
     @Published var searchQuery: String = ""
-    @Published var books: [OpenLibraryBook] = []
+    @Published var books: [Book] = []
     @Published var errorMessage: String?
 
     private let openLibraryAPIClient: OpenLibraryAPIClient
@@ -36,7 +36,7 @@ final class SearchBooksViewModel: ObservableObject {
 
         searchTask = Task {
             do {
-                books = try await openLibraryAPIClient.search(query)
+                books = try await openLibraryAPIClient.search(query).map { $0.asBook() }
             } catch {
                 print("Search error: \(error)")
                 errorMessage = "Unable to search. Check your connection."

@@ -35,6 +35,7 @@ private func migrate(dbQueue: DatabaseQueue) throws {
     migrator.registerMigration("v1") { db in
         try db.create(table: "books") { t in
             t.column("authorNames", .text)
+            t.column("coverEditionKey", .text)
             t.column("openLibraryKey", .text).notNull()
             t.column("title", .text).notNull()
             t.column("uuid", .text).notNull().primaryKey()

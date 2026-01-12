@@ -9,6 +9,7 @@ struct BookDetailsViewModelTests {
 
     private let book = Book(
         authorNames: "J.R.R. Tolkien",
+        coverEditionKey: "OL51711263M",
         openLibraryKey: "/works/OL27482W",
         title: "The Hobbit"
     )
@@ -20,7 +21,7 @@ struct BookDetailsViewModelTests {
         viewModel.addToFavorites()
 
         #expect(database.books().findByOpenLibraryKey(book.openLibraryKey) != nil)
-        #expect(viewModel.state?.isFavorite == true)
+        #expect(viewModel.favoriteState == .favorite)
     }
 
     @Test func addToFavorites_dbError() async throws {
@@ -33,7 +34,7 @@ struct BookDetailsViewModelTests {
         viewModel.addToFavorites()
 
         #expect(viewModel.errorMessage != nil)
-        #expect(viewModel.state?.isFavorite != true)
+        #expect(viewModel.favoriteState == .notFavorite)
     }
 
     @Test func loadBook_notFavorite() async throws {
@@ -41,13 +42,8 @@ struct BookDetailsViewModelTests {
 
         await viewModel.loadBook()
 
-        #expect(
-            viewModel.state == BookDetailsUIState(
-                authorNames: book.authorNames,
-                isFavorite: false,
-                title: book.title
-            )
-        )
+        #expect(viewModel.book?.openLibraryKey == book.openLibraryKey)
+        #expect(viewModel.favoriteState == .notFavorite)
     }
 
     @Test func loadBook_notFavorite_networkError() async throws {
@@ -56,7 +52,8 @@ struct BookDetailsViewModelTests {
 
         await viewModel.loadBook()
 
-        #expect(viewModel.state == nil)
+        #expect(viewModel.book == nil)
+        #expect(viewModel.favoriteState == .hidden)
         #expect(viewModel.loadErrorMessage != nil)
     }
 
@@ -66,13 +63,8 @@ struct BookDetailsViewModelTests {
 
         await viewModel.loadBook()
 
-        #expect(
-            viewModel.state == BookDetailsUIState(
-                authorNames: book.authorNames,
-                isFavorite: true,
-                title: book.title
-            )
-        )
+        #expect(viewModel.book == book)
+        #expect(viewModel.favoriteState == .favorite)
     }
 
     @Test func loadBook_favorite_networkError() async throws {
@@ -82,13 +74,8 @@ struct BookDetailsViewModelTests {
 
         await viewModel.loadBook()
 
-        #expect(
-            viewModel.state == BookDetailsUIState(
-                authorNames: book.authorNames,
-                isFavorite: true,
-                title: book.title
-            )
-        )
+        #expect(viewModel.book == book)
+        #expect(viewModel.favoriteState == .favorite)
         #expect(viewModel.loadErrorMessage != nil)
     }
 
@@ -100,7 +87,7 @@ struct BookDetailsViewModelTests {
         viewModel.removeFromFavorites()
 
         #expect(database.books().findByOpenLibraryKey(book.openLibraryKey) == nil)
-        #expect(viewModel.state?.isFavorite == false)
+        #expect(viewModel.favoriteState == .notFavorite)
     }
 
     @Test func removeFromFavorites_dbError() async throws {
@@ -114,7 +101,7 @@ struct BookDetailsViewModelTests {
         viewModel.removeFromFavorites()
 
         #expect(viewModel.errorMessage != nil)
-        #expect(viewModel.state?.isFavorite == true)
+        #expect(viewModel.favoriteState == .favorite)
     }
 
     private func createViewModel(openLibraryKey: String) -> BookDetailsViewModel {

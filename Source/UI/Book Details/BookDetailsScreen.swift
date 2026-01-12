@@ -6,8 +6,8 @@ struct BookDetailsScreen: View {
 
     var body: some View {
         ZStack {
-            if let book = viewModel.state {
-                bookContent(book)
+            if let book = viewModel.book {
+                bookContent(book, favoriteState: viewModel.favoriteState)
                     .overlay(alignment: .top) {
                         if let loadErrorMessage = viewModel.loadErrorMessage {
                             loadErrorBanner(loadErrorMessage)
@@ -35,9 +35,19 @@ struct BookDetailsScreen: View {
     }
 
     @ViewBuilder
-    private func bookContent(_ book: BookDetailsUIState) -> some View {
+    private func bookContent(
+        _ book: Book,
+        favoriteState: BookDetailsViewModel.FavoritesState
+    ) -> some View {
         ZStack {
             VStack {
+                AsyncImage(url: book.coverImageURL) { image in
+                    image.resizable().aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Color.clear
+                }
+                .frame(maxWidth: 200, maxHeight: 200)
+
                 Text(book.title)
                     .font(.largeTitle)
 
@@ -48,16 +58,21 @@ struct BookDetailsScreen: View {
             }
 
             Group {
-                if book.isFavorite {
+                switch favoriteState {
+                case .favorite:
                     Button("Remove from Favorites") {
                         viewModel.removeFromFavorites()
                     }
                     .buttonStyle(.borderedProminent)
-                } else {
+
+                case .notFavorite:
                     Button("Add to Favorites") {
                         viewModel.addToFavorites()
                     }
                     .buttonStyle(.borderedProminent)
+
+                case .hidden:
+                    EmptyView()
                 }
             }
             .frame(maxHeight: .infinity, alignment: .bottom)

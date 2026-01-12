@@ -16,7 +16,7 @@ struct SearchBooksViewModelTests {
         await testScheduler.run()
 
         #expect(viewModel.books.count == 2)
-        #expect(viewModel.books.allSatisfy { ($0.authorName?.first ?? "").contains("Tolkien") })
+        #expect(viewModel.books.allSatisfy { ($0.authorNames ?? "").contains("Tolkien") })
     }
 
     @Test func searchBooks_error() async {

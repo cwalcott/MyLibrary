@@ -14,13 +14,22 @@ struct FavoritesScreen: View {
                     )
                 )
             } label: {
-                VStack(alignment: .leading) {
-                    Text(book.title)
-                        .font(.headline)
+                HStack {
+                    AsyncImage(url: book.coverImageURL) { image in
+                        image.resizable().aspectRatio(contentMode: .fit)
+                    } placeholder: {
+                        Color.clear
+                    }
+                    .frame(width: 50, height: 50)
 
-                    if let authors = book.authorNames {
-                        Text(authors)
-                            .font(.subheadline)
+                    VStack(alignment: .leading) {
+                        Text(book.title)
+                            .font(.headline)
+
+                        if let authors = book.authorNames {
+                            Text(authors)
+                                .font(.subheadline)
+                        }
                     }
                 }
             }

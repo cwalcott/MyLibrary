@@ -1,16 +1,13 @@
 import Combine
 
-struct BookDetailsUIState: Equatable {
-    var authorNames: String?
-    var isFavorite: Bool
-    var title: String
-}
-
 @MainActor
 final class BookDetailsViewModel: ObservableObject {
-    @Published var state: BookDetailsUIState?
+    @Published var book: Book?
+    @Published var favoriteState: FavoritesState = .hidden
     @Published var errorMessage: String?
     @Published var loadErrorMessage: String?
+
+    enum FavoritesState { case favorite, notFavorite, hidden }
 
     private let database: AppDatabase
     private let openLibraryAPIClient: OpenLibraryAPIClient
@@ -29,13 +26,13 @@ final class BookDetailsViewModel: ObservableObject {
     }
 
     func addToFavorites() {
-        guard let openLibraryBook, let state, !state.isFavorite else {
+        guard let openLibraryBook, favoriteState == .notFavorite else {
             return
         }
 
         do {
             try database.books().insert(openLibraryBook.asBook())
-            self.state?.isFavorite = true
+            favoriteState = .favorite
         } catch {
             errorMessage = "Failed to add to favorites"
         }
@@ -45,14 +42,18 @@ final class BookDetailsViewModel: ObservableObject {
         do {
             if let book = try await openLibraryAPIClient.getBook(self.openLibraryKey) {
                 self.openLibraryBook = book
-                self.state = BookDetailsUIState(
-                    authorNames: book.authorName?.joined(separator: ","),
-                    isFavorite: database.books().findByOpenLibraryKey(openLibraryKey) != nil,
-                    title: book.title
-                )
+
+                if let localBook = database.books().findByOpenLibraryKey(openLibraryKey) {
+                    self.book = localBook
+                    self.favoriteState = .favorite
+                } else {
+                    self.book = book.asBook()
+                    self.favoriteState = .notFavorite
+                }
             } else {
                 self.openLibraryBook = nil
-                self.state = nil
+                self.book = nil
+                self.favoriteState = .hidden
                 self.loadErrorMessage = "Book not found"
             }
         } catch {
@@ -60,27 +61,25 @@ final class BookDetailsViewModel: ObservableObject {
             self.openLibraryBook = nil
 
             if let localBook = database.books().findByOpenLibraryKey(openLibraryKey) {
-                self.state = BookDetailsUIState(
-                    authorNames: localBook.authorNames,
-                    isFavorite: true,
-                    title: localBook.title
-                )
+                self.book = localBook
+                self.favoriteState = .favorite
                 self.loadErrorMessage = "Showing offline data. Check your connection."
             } else {
-                self.state = nil
+                self.book = nil
+                self.favoriteState = .hidden
                 self.loadErrorMessage = "Unable to load book. Check your connection."
             }
         }
     }
 
     func removeFromFavorites() {
-        guard let state, state.isFavorite else {
+        guard favoriteState == .favorite else {
             return
         }
 
         do {
             try database.books().deleteByOpenLibraryKey(openLibraryKey)
-            self.state?.isFavorite = false
+            favoriteState = .notFavorite
         } catch {
             errorMessage = "Failed to remove from favorites"
         }

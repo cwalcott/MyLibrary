@@ -29,16 +29,27 @@ struct SearchBooksScreen: View {
                 List(viewModel.books) { book in
                     NavigationLink {
                         BookDetailsScreen(
-                            viewModel: composer.makeBookDetailsViewModel(openLibraryKey: book.key)
+                            viewModel: composer.makeBookDetailsViewModel(
+                                openLibraryKey: book.openLibraryKey
+                            )
                         )
                     } label: {
-                        VStack(alignment: .leading) {
-                            Text(book.title)
-                                .font(.headline)
+                        HStack {
+                            AsyncImage(url: book.coverImageURL) { image in
+                                image.resizable().aspectRatio(contentMode: .fit)
+                            } placeholder: {
+                                Color.clear
+                            }
+                            .frame(width: 50, height: 50)
 
-                            if let author = book.authorName?.first {
-                                Text(author)
-                                    .font(.subheadline)
+                            VStack(alignment: .leading) {
+                                Text(book.title)
+                                    .font(.headline)
+
+                                if let authors = book.authorNames {
+                                    Text(authors)
+                                        .font(.subheadline)
+                                }
                             }
                         }
                     }

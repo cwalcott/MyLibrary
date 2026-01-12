@@ -25,6 +25,7 @@ struct OpenLibraryBook: Codable, Equatable, Identifiable {
     func asBook() -> Book {
         return Book(
             authorNames: authorName?.joined(separator: ", "),
+            coverEditionKey: coverEditionKey,
             openLibraryKey: key,
             title: title
         )
