@@ -25,6 +25,8 @@ struct SearchBooksScreen: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
+            } else if viewModel.noResultsFound {
+                ContentUnavailableView.search(text: viewModel.searchQuery)
             } else {
                 List(viewModel.books) { book in
                     NavigationLink {

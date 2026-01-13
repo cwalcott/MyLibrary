@@ -1,3 +1,4 @@
+import GRDB
 import SwiftUI
 
 struct FavoritesScreen: View {
@@ -6,35 +7,47 @@ struct FavoritesScreen: View {
     @Environment(\.composer) private var composer
 
     var body: some View {
-        List(viewModel.books) { book in
-            NavigationLink {
-                BookDetailsScreen(
-                    viewModel: composer.makeBookDetailsViewModel(
-                        openLibraryKey: book.openLibraryKey
+        Group {
+            if let books = viewModel.books {
+                if books.isEmpty {
+                    ContentUnavailableView(
+                        "No Favorites Yet",
+                        systemImage: "star",
+                        description: Text("Tap + to search and add books to your favorites")
                     )
-                )
-            } label: {
-                HStack {
-                    AsyncImage(url: book.coverImageURL) { image in
-                        image.resizable().aspectRatio(contentMode: .fit)
-                    } placeholder: {
-                        Color.clear
-                    }
-                    .frame(width: 50, height: 50)
+                } else {
+                    List(books) { book in
+                        NavigationLink {
+                            BookDetailsScreen(
+                                viewModel: composer.makeBookDetailsViewModel(
+                                    openLibraryKey: book.openLibraryKey
+                                )
+                            )
+                        } label: {
+                            HStack {
+                                AsyncImage(url: book.coverImageURL) { image in
+                                    image.resizable().aspectRatio(contentMode: .fit)
+                                } placeholder: {
+                                    Color.clear
+                                }
+                                .frame(width: 50, height: 50)
 
-                    VStack(alignment: .leading) {
-                        Text(book.title)
-                            .font(.headline)
+                                VStack(alignment: .leading) {
+                                    Text(book.title)
+                                        .font(.headline)
 
-                        if let authors = book.authorNames {
-                            Text(authors)
-                                .font(.subheadline)
+                                    if let authors = book.authorNames {
+                                        Text(authors)
+                                            .font(.subheadline)
+                                    }
+                                }
+                            }
                         }
                     }
+                    .navigationTitle("Favorite Books")
                 }
             }
         }
-        .navigationTitle("Favorite Books")
         .toolbar {
             NavigationLink {
                 SearchBooksScreen(viewModel: composer.makeSearchBooksViewModel())
@@ -50,5 +63,18 @@ struct FavoritesScreen: View {
 
     NavigationStack {
         FavoritesScreen(viewModel: composer.makeFavoritesViewModel())
+    }
+}
+
+#Preview("Empty") {
+    let composer = Composer.preview {
+        try! $0.database.dbQueue.write { db in
+            try db.execute(sql: "DELETE FROM books")
+        }
+    }
+
+    return NavigationStack {
+        FavoritesScreen(viewModel: composer.makeFavoritesViewModel())
+            .environment(\.composer, composer)
     }
 }

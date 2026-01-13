@@ -5,8 +5,13 @@ import Foundation
 @MainActor
 final class SearchBooksViewModel: ObservableObject {
     @Published var searchQuery: String = ""
+    @Published var lastQuery: String = ""
     @Published var books: [Book] = []
     @Published var errorMessage: String?
+
+    var noResultsFound: Bool {
+        books.isEmpty && !searchQuery.isEmpty && lastQuery == searchQuery
+    }
 
     private let openLibraryAPIClient: OpenLibraryAPIClient
     private var cancellables = Set<AnyCancellable>()
@@ -37,6 +42,7 @@ final class SearchBooksViewModel: ObservableObject {
         searchTask = Task {
             do {
                 books = try await openLibraryAPIClient.search(query).map { $0.asBook() }
+                lastQuery = query
             } catch {
                 print("Search error: \(error)")
                 errorMessage = "Unable to search. Check your connection."

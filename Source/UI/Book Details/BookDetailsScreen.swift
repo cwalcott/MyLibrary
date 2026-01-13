@@ -8,16 +8,15 @@ struct BookDetailsScreen: View {
         ZStack {
             if let book = viewModel.book {
                 bookContent(book, favoriteState: viewModel.favoriteState)
-                    .overlay(alignment: .top) {
-                        if let loadErrorMessage = viewModel.loadErrorMessage {
-                            loadErrorBanner(loadErrorMessage)
-                        }
-                    }
             } else {
                 if let loadErrorMessage = viewModel.loadErrorMessage {
                     loadErrorScreen(loadErrorMessage)
                 } else {
-                    Text("Loading...")
+                    bookContent(
+                        Book(authorNames: "Placeholder", openLibraryKey: "", title: "Placeholder"),
+                        favoriteState: .hidden
+                    )
+                    .redacted(reason: .placeholder)
                 }
             }
         }
@@ -44,7 +43,7 @@ struct BookDetailsScreen: View {
                 AsyncImage(url: book.coverImageURL) { image in
                     image.resizable().aspectRatio(contentMode: .fit)
                 } placeholder: {
-                    Color.clear
+                    Color.gray.opacity(0.5)
                 }
                 .frame(maxWidth: 200, maxHeight: 200)
 
@@ -81,44 +80,18 @@ struct BookDetailsScreen: View {
     }
 
     @ViewBuilder
-    private func loadErrorBanner(_ error: String) -> some View {
-        HStack {
-            Image(systemName: "wifi.slash")
-            Text(error)
-                .font(.caption)
-            Spacer()
-            Button("Retry") {
-                Task {
-                    await viewModel.loadBook()
-                }
-            }
-            .buttonStyle(.borderless)
-            .font(.caption)
-        }
-        .padding(8)
-        .frame(maxWidth: .infinity)
-        .background(Color.yellow.opacity(0.3))
-    }
-
-    @ViewBuilder
     private func loadErrorScreen(_ error: String) -> some View {
-        VStack(spacing: 12) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.largeTitle)
-                .foregroundStyle(.secondary)
-
+        ContentUnavailableView {
+            Label("Unable to load book", systemImage: "exclamationmark.triangle")
+        } description: {
             Text(error)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-
+        } actions: {
             Button("Retry") {
                 Task {
                     await viewModel.loadBook()
                 }
             }
-            .buttonStyle(.bordered)
         }
-        .padding()
     }
 }
 
@@ -134,6 +107,18 @@ struct BookDetailsScreen: View {
 
 #Preview("Not favorite") {
     @Previewable @Environment(\.composer) var composer
+
+    NavigationStack {
+        BookDetailsScreen(
+            viewModel: composer.makeBookDetailsViewModel(openLibraryKey: "/works/OL27513W")
+        )
+    }
+}
+
+#Preview("Slow connection") {
+    let composer = Composer.preview {
+        ($0.openLibraryAPIClient as! FakeOpenLibraryAPIClient).networkDelay = .seconds(30)
+    }
 
     NavigationStack {
         BookDetailsScreen(

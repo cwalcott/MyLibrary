@@ -76,7 +76,8 @@ struct BookDetailsViewModelTests {
 
         #expect(viewModel.book == book)
         #expect(viewModel.favoriteState == .favorite)
-        #expect(viewModel.loadErrorMessage != nil)
+        #expect(viewModel.errorMessage == nil)
+        #expect(viewModel.loadErrorMessage == nil)
     }
 
     @Test func removeFromFavorites() async throws {

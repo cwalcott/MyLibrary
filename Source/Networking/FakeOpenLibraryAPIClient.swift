@@ -1,11 +1,14 @@
 
 
 final class FakeOpenLibraryAPIClient: OpenLibraryAPIClient {
+    var networkDelay: Duration?
     var networkErrors = false
 
     func getBook(_ key: String) async throws -> OpenLibraryBook? {
         if networkErrors {
             throw APIError.invalidResponse
+        } else if let networkDelay {
+            try await Task.sleep(for: networkDelay)
         }
 
         return MOCK_BOOKS.first(where: { $0.key == key })
@@ -14,6 +17,8 @@ final class FakeOpenLibraryAPIClient: OpenLibraryAPIClient {
     func search(_ query: String) async throws -> [OpenLibraryBook] {
         if networkErrors {
             throw APIError.invalidResponse
+        } else if let networkDelay {
+            try await Task.sleep(for: networkDelay)
         }
 
         guard !query.isEmpty else {

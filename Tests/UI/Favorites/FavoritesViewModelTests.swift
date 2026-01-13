@@ -25,7 +25,7 @@ struct FavoritesViewModelTests {
         let viewModel = createViewModel()
         var booksStream = viewModel.$books.values.makeAsyncIterator()
 
-        #expect(await booksStream.next() == [])
+        try #expect(#require(await booksStream.next()) == nil)
         #expect(await booksStream.next() == books)
 
         try database.books().deleteByOpenLibraryKey(books[1].openLibraryKey)

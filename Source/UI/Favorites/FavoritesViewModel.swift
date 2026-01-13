@@ -2,9 +2,9 @@ import Combine
 
 @MainActor
 final class FavoritesViewModel: ObservableObject {
-    @Published var books: [Book] = []
+    @Published var books: [Book]?
 
     init(database: AppDatabase) {
-        database.books().streamAll().assign(to: &$books)
+        database.books().streamAll().map { $0 as [Book]? }.assign(to: &$books)
     }
 }

@@ -63,7 +63,6 @@ final class BookDetailsViewModel: ObservableObject {
             if let localBook = database.books().findByOpenLibraryKey(openLibraryKey) {
                 self.book = localBook
                 self.favoriteState = .favorite
-                self.loadErrorMessage = "Showing offline data. Check your connection."
             } else {
                 self.book = nil
                 self.favoriteState = .hidden
