@@ -45,7 +45,7 @@ struct BookDetailsScreen: View {
                 } placeholder: {
                     Color.gray.opacity(0.5)
                 }
-                .frame(maxWidth: 200, maxHeight: 200)
+                .frame(maxWidth: 200, maxHeight: 300)
 
                 Text(book.title)
                     .font(.largeTitle)
