@@ -34,7 +34,7 @@ final class SearchBooksViewModel: ObservableObject {
         searchTask?.cancel()
         errorMessage = nil
 
-        guard !query.isEmpty else {
+        guard query.count > 2 else {
             books = []
             return
         }

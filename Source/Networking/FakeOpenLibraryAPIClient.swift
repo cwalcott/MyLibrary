@@ -1,5 +1,3 @@
-
-
 final class FakeOpenLibraryAPIClient: OpenLibraryAPIClient {
     var networkDelay: Duration?
     var networkErrors = false
@@ -55,5 +53,5 @@ let MOCK_BOOKS = [
         authorName: ["Frank Herbert"],
         key: "/works/OL893415W",
         title: "Dune"
-    ),
+    )
 ]
