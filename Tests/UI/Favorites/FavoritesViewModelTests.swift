@@ -9,14 +9,14 @@ struct FavoritesViewModelTests {
 
     private let books = [
         Book(
-            authorNames: "J.R.R. Tolkien",
-            openLibraryKey: "/works/OL27482W",
-            title: "The Hobbit"
-        ),
-        Book(
             authorNames: "Frank Herbert",
             openLibraryKey: "/works/OL893415W",
             title: "Dune"
+        ),
+        Book(
+            authorNames: "J.R.R. Tolkien",
+            openLibraryKey: "/works/OL27482W",
+            title: "The Hobbit"
         )
     ]
 

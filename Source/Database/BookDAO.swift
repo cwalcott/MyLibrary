@@ -28,7 +28,7 @@ final class BookDAO {
 
     func streamAll() -> some Publisher<[Book], Never> {
         return ValueObservation
-            .tracking { db in try Book.fetchAll(db) }
+            .tracking { db in try Book.order(Book.Columns.title).fetchAll(db) }
             .publisher(in: dbQueue)
             .catch { error -> Just<[Book]> in
                 print("Database error in streamAll: \(error)")
