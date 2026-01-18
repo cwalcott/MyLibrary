@@ -54,7 +54,7 @@ struct BookDetailsViewModelTests {
 
         #expect(viewModel.book == nil)
         #expect(viewModel.favoriteState == .hidden)
-        #expect(viewModel.loadErrorMessage != nil)
+        #expect(viewModel.errorMessage != nil)
     }
 
     @Test func loadBook_favorite() async throws {
@@ -65,19 +65,6 @@ struct BookDetailsViewModelTests {
 
         #expect(viewModel.book == book)
         #expect(viewModel.favoriteState == .favorite)
-    }
-
-    @Test func loadBook_favorite_networkError() async throws {
-        try database.books().insert(book)
-        let viewModel = createViewModel(openLibraryKey: book.openLibraryKey)
-        openLibraryAPIClient.networkErrors = true
-
-        await viewModel.loadBook()
-
-        #expect(viewModel.book == book)
-        #expect(viewModel.favoriteState == .favorite)
-        #expect(viewModel.errorMessage == nil)
-        #expect(viewModel.loadErrorMessage == nil)
     }
 
     @Test func removeFromFavorites() async throws {

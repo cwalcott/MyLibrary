@@ -5,15 +5,12 @@ final class BookDetailsViewModel: ObservableObject {
     @Published var book: Book?
     @Published var favoriteState: FavoritesState = .hidden
     @Published var errorMessage: String?
-    @Published var loadErrorMessage: String?
 
     enum FavoritesState { case favorite, notFavorite, hidden }
 
     private let database: AppDatabase
     private let openLibraryAPIClient: OpenLibraryAPIClient
     private let openLibraryKey: String
-
-    private var openLibraryBook: OpenLibraryBook?
 
     init(
         database: AppDatabase,
@@ -26,12 +23,12 @@ final class BookDetailsViewModel: ObservableObject {
     }
 
     func addToFavorites() {
-        guard let openLibraryBook, favoriteState == .notFavorite else {
+        guard let book, favoriteState == .notFavorite else {
             return
         }
 
         do {
-            try database.books().insert(openLibraryBook.asBook())
+            try database.books().insert(book)
             favoriteState = .favorite
         } catch {
             errorMessage = "Failed to add to favorites"
@@ -39,35 +36,28 @@ final class BookDetailsViewModel: ObservableObject {
     }
 
     func loadBook() async {
-        do {
-            if let book = try await openLibraryAPIClient.getBook(self.openLibraryKey) {
-                self.openLibraryBook = book
+        self.errorMessage = nil
 
-                if let localBook = database.books().findByOpenLibraryKey(openLibraryKey) {
-                    self.book = localBook
-                    self.favoriteState = .favorite
-                } else {
-                    self.book = book.asBook()
-                    self.favoriteState = .notFavorite
-                }
+        if let localBook = database.books().findByOpenLibraryKey(openLibraryKey) {
+            self.book = localBook
+            self.favoriteState = .favorite
+            return
+        }
+
+        do {
+            if let openLibraryBook = try await openLibraryAPIClient.getBook(self.openLibraryKey) {
+                self.book = openLibraryBook.asBook()
+                self.favoriteState = .notFavorite
             } else {
-                self.openLibraryBook = nil
                 self.book = nil
                 self.favoriteState = .hidden
-                self.loadErrorMessage = "Book not found"
+                self.errorMessage = "Book not found"
             }
         } catch {
             print("Failed to fetch book: \(error)")
-            self.openLibraryBook = nil
-
-            if let localBook = database.books().findByOpenLibraryKey(openLibraryKey) {
-                self.book = localBook
-                self.favoriteState = .favorite
-            } else {
-                self.book = nil
-                self.favoriteState = .hidden
-                self.loadErrorMessage = "Unable to load book. Check your connection."
-            }
+            self.book = nil
+            self.favoriteState = .hidden
+            self.errorMessage = "Unable to load book. Check your connection."
         }
     }
 

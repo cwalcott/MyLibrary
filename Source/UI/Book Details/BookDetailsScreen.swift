@@ -9,15 +9,11 @@ struct BookDetailsScreen: View {
             if let book = viewModel.book {
                 bookContent(book, favoriteState: viewModel.favoriteState)
             } else {
-                if let loadErrorMessage = viewModel.loadErrorMessage {
-                    loadErrorScreen(loadErrorMessage)
-                } else {
-                    bookContent(
-                        Book(authorNames: "Placeholder", openLibraryKey: "", title: "Placeholder"),
-                        favoriteState: .hidden
-                    )
-                    .redacted(reason: .placeholder)
-                }
+                bookContent(
+                    Book(authorNames: "Placeholder", openLibraryKey: "", title: "Placeholder"),
+                    favoriteState: .hidden
+                )
+                .redacted(reason: .placeholder)
             }
         }
         .alert(
@@ -78,21 +74,6 @@ struct BookDetailsScreen: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-
-    @ViewBuilder
-    private func loadErrorScreen(_ error: String) -> some View {
-        ContentUnavailableView {
-            Label("Unable to load book", systemImage: "exclamationmark.triangle")
-        } description: {
-            Text(error)
-        } actions: {
-            Button("Retry") {
-                Task {
-                    await viewModel.loadBook()
-                }
-            }
-        }
-    }
 }
 
 #Preview("Favorite") {
@@ -117,7 +98,7 @@ struct BookDetailsScreen: View {
 
 #Preview("Slow connection") {
     let composer = Composer.preview {
-        ($0.openLibraryAPIClient as! FakeOpenLibraryAPIClient).networkDelay = .seconds(30)
+        ($0.openLibraryAPIClient as! FakeOpenLibraryAPIClient).networkDelay = .seconds(3)
     }
 
     NavigationStack {
@@ -142,20 +123,7 @@ struct BookDetailsScreen: View {
     }
 }
 
-#Preview("Network Error (locally saved)") {
-    let composer = Composer.preview {
-        ($0.openLibraryAPIClient as! FakeOpenLibraryAPIClient).networkErrors = true
-    }
-
-    NavigationStack {
-        BookDetailsScreen(
-            viewModel: composer.makeBookDetailsViewModel(openLibraryKey: "/works/OL27482W")
-        )
-        .environment(\.composer, composer)
-    }
-}
-
-#Preview("Network Error (no local data)") {
+#Preview("Network Error") {
     let composer = Composer.preview {
         ($0.openLibraryAPIClient as! FakeOpenLibraryAPIClient).networkErrors = true
     }
