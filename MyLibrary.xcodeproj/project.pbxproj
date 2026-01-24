@@ -12,6 +12,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		023A4FFB2F251CC10026980F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02439A032EAD677900FC32AC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02439A0A2EAD677900FC32AC;
+			remoteInfo = MyLibrary;
+		};
 		02439A192EAD677B00FC32AC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 02439A032EAD677900FC32AC /* Project object */;
@@ -22,24 +29,37 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		023A4FF52F251CC10026980F /* UI Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02439A0B2EAD677900FC32AC /* MyLibrary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLibrary.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		02439A182EAD677B00FC32AC /* MyLibraryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyLibraryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		02439A182EAD677B00FC32AC /* Unit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		023A4FF62F251CC10026980F /* UI Tests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "UI Tests";
+			sourceTree = "<group>";
+		};
 		02439A0D2EAD677900FC32AC /* Source */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Source;
 			sourceTree = "<group>";
 		};
-		02439A1B2EAD677B00FC32AC /* Tests */ = {
+		02439A1B2EAD677B00FC32AC /* Unit Tests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Tests;
+			path = "Unit Tests";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		023A4FF22F251CC10026980F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		02439A082EAD677900FC32AC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -63,7 +83,8 @@
 			isa = PBXGroup;
 			children = (
 				02439A0D2EAD677900FC32AC /* Source */,
-				02439A1B2EAD677B00FC32AC /* Tests */,
+				02439A1B2EAD677B00FC32AC /* Unit Tests */,
+				023A4FF62F251CC10026980F /* UI Tests */,
 				02439A0C2EAD677900FC32AC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -72,7 +93,8 @@
 			isa = PBXGroup;
 			children = (
 				02439A0B2EAD677900FC32AC /* MyLibrary.app */,
-				02439A182EAD677B00FC32AC /* MyLibraryTests.xctest */,
+				02439A182EAD677B00FC32AC /* Unit Tests.xctest */,
+				023A4FF52F251CC10026980F /* UI Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -80,6 +102,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		023A4FF42F251CC10026980F /* UI Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 023A4FFD2F251CC10026980F /* Build configuration list for PBXNativeTarget "UI Tests" */;
+			buildPhases = (
+				023A4FF12F251CC10026980F /* Sources */,
+				023A4FF22F251CC10026980F /* Frameworks */,
+				023A4FF32F251CC10026980F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				023A4FFC2F251CC10026980F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				023A4FF62F251CC10026980F /* UI Tests */,
+			);
+			name = "UI Tests";
+			packageProductDependencies = (
+			);
+			productName = MyLibraryUITests;
+			productReference = 023A4FF52F251CC10026980F /* UI Tests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		02439A0A2EAD677900FC32AC /* MyLibrary */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02439A2C2EAD677B00FC32AC /* Build configuration list for PBXNativeTarget "MyLibrary" */;
@@ -104,9 +149,9 @@
 			productReference = 02439A0B2EAD677900FC32AC /* MyLibrary.app */;
 			productType = "com.apple.product-type.application";
 		};
-		02439A172EAD677B00FC32AC /* MyLibraryTests */ = {
+		02439A172EAD677B00FC32AC /* Unit Tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 02439A2F2EAD677B00FC32AC /* Build configuration list for PBXNativeTarget "MyLibraryTests" */;
+			buildConfigurationList = 02439A2F2EAD677B00FC32AC /* Build configuration list for PBXNativeTarget "Unit Tests" */;
 			buildPhases = (
 				02439A142EAD677B00FC32AC /* Sources */,
 				02439A152EAD677B00FC32AC /* Frameworks */,
@@ -118,13 +163,13 @@
 				02439A1A2EAD677B00FC32AC /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				02439A1B2EAD677B00FC32AC /* Tests */,
+				02439A1B2EAD677B00FC32AC /* Unit Tests */,
 			);
-			name = MyLibraryTests;
+			name = "Unit Tests";
 			packageProductDependencies = (
 			);
 			productName = MyLibraryTests;
-			productReference = 02439A182EAD677B00FC32AC /* MyLibraryTests.xctest */;
+			productReference = 02439A182EAD677B00FC32AC /* Unit Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -134,9 +179,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 2600;
+				LastSwiftUpdateCheck = 2620;
 				LastUpgradeCheck = 2620;
 				TargetAttributes = {
+					023A4FF42F251CC10026980F = {
+						CreatedOnToolsVersion = 26.2;
+						TestTargetID = 02439A0A2EAD677900FC32AC;
+					};
 					02439A0A2EAD677900FC32AC = {
 						CreatedOnToolsVersion = 26.0.1;
 					};
@@ -165,12 +214,20 @@
 			projectRoot = "";
 			targets = (
 				02439A0A2EAD677900FC32AC /* MyLibrary */,
-				02439A172EAD677B00FC32AC /* MyLibraryTests */,
+				02439A172EAD677B00FC32AC /* Unit Tests */,
+				023A4FF42F251CC10026980F /* UI Tests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		023A4FF32F251CC10026980F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		02439A092EAD677900FC32AC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -188,6 +245,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		023A4FF12F251CC10026980F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		02439A072EAD677900FC32AC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -205,6 +269,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		023A4FFC2F251CC10026980F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02439A0A2EAD677900FC32AC /* MyLibrary */;
+			targetProxy = 023A4FFB2F251CC10026980F /* PBXContainerItemProxy */;
+		};
 		02439A1A2EAD677B00FC32AC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 02439A0A2EAD677900FC32AC /* MyLibrary */;
@@ -213,6 +282,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		023A4FFE2F251CC10026980F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X576H4X88U;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cwalcott.MyLibraryUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MyLibrary;
+			};
+			name = Debug;
+		};
+		023A4FFF2F251CC10026980F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = X576H4X88U;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cwalcott.MyLibraryUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = MyLibrary;
+			};
+			name = Release;
+		};
 		02439A2A2EAD677B00FC32AC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -445,6 +556,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		023A4FFD2F251CC10026980F /* Build configuration list for PBXNativeTarget "UI Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				023A4FFE2F251CC10026980F /* Debug */,
+				023A4FFF2F251CC10026980F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		02439A062EAD677900FC32AC /* Build configuration list for PBXProject "MyLibrary" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -463,7 +583,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		02439A2F2EAD677B00FC32AC /* Build configuration list for PBXNativeTarget "MyLibraryTests" */ = {
+		02439A2F2EAD677B00FC32AC /* Build configuration list for PBXNativeTarget "Unit Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				02439A302EAD677B00FC32AC /* Debug */,

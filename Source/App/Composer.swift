@@ -11,6 +11,16 @@ class Composer {
         )
     }()
 
+    static let uiTesting: Composer = {
+        let database = try! AppDatabase(dbQueue: DatabaseQueue())
+        try! database.books().insert(MOCK_BOOKS[0].asBook())
+
+        return Composer(
+            database: database,
+            openLibraryAPIClient: FakeOpenLibraryAPIClient()
+        )
+    }()
+
     static func preview(apply: ((Composer) -> Void)? = nil) -> Composer {
         let database = try! AppDatabase(dbQueue: DatabaseQueue())
         try! database.books().insert(MOCK_BOOKS[0].asBook())
@@ -57,6 +67,8 @@ extension EnvironmentValues {
     @Entry var composer: Composer = {
         if ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1" {
             return .preview()
+        } else if CommandLine.arguments.contains("-UITesting") {
+            return .uiTesting
         } else {
             return .live
         }
