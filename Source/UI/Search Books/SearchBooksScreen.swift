@@ -9,26 +9,32 @@ struct SearchBooksScreen: View {
 
     var body: some View {
         Group {
-            if let errorMessage = viewModel.errorMessage {
+            switch viewModel.results {
+            case .empty:
+                EmptyView()
+
+            case .networkError:
                 VStack(spacing: 12) {
                     Image(systemName: "exclamationmark.triangle")
                         .font(.largeTitle)
                         .foregroundStyle(.secondary)
 
-                    Text(errorMessage)
+                    Text("Unable to search. Check your connection.")
                         .foregroundStyle(.secondary)
 
                     Button("Retry") {
-                        viewModel.performSearch(viewModel.searchQuery)
+                        viewModel.performSearch(viewModel.query)
                     }
                     .buttonStyle(.bordered)
                 }
                 .frame(maxWidth: .infinity)
                 .padding()
-            } else if viewModel.noResultsFound {
-                ContentUnavailableView.search(text: viewModel.searchQuery)
-            } else {
-                List(viewModel.books) { book in
+
+            case .noResults:
+                ContentUnavailableView.search(text: viewModel.query)
+
+            case .results(let books):
+                List(books) { book in
                     NavigationLink {
                         BookDetailsScreen(
                             viewModel: composer.makeBookDetailsViewModel(
@@ -60,7 +66,7 @@ struct SearchBooksScreen: View {
         }
         .navigationTitle("Search Books")
         .navigationBarTitleDisplayMode(.inline)
-        .searchable(text: $viewModel.searchQuery, isPresented: $searchIsActive)
+        .searchable(text: $viewModel.query, isPresented: $searchIsActive)
         .searchPresentationToolbarBehavior(.avoidHidingContent)
     }
 }
