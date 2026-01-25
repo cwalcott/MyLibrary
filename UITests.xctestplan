@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "3528FEB9-4A3A-4C82-B2FE-8AAE602A5F1E",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:MyLibrary.xcodeproj",
+        "identifier" : "023A4FF42F251CC10026980F",
+        "name" : "UI Tests"
+      }
+    }
+  ],
+  "version" : 1
+}

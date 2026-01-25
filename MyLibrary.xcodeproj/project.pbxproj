@@ -32,6 +32,8 @@
 		023A4FF52F251CC10026980F /* UI Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "UI Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		02439A0B2EAD677900FC32AC /* MyLibrary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyLibrary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		02439A182EAD677B00FC32AC /* Unit Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		02AA393F2F25AA8100CEEA96 /* UnitTests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UnitTests.xctestplan; sourceTree = "<group>"; };
+		02AA39402F25AB3D00CEEA96 /* UITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITests.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -85,6 +87,8 @@
 				02439A0D2EAD677900FC32AC /* Source */,
 				02439A1B2EAD677B00FC32AC /* Unit Tests */,
 				023A4FF62F251CC10026980F /* UI Tests */,
+				02AA393F2F25AA8100CEEA96 /* UnitTests.xctestplan */,
+				02AA39402F25AB3D00CEEA96 /* UITests.xctestplan */,
 				02439A0C2EAD677900FC32AC /* Products */,
 			);
 			sourceTree = "<group>";

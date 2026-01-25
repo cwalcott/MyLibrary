@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "107B47FE-9A12-4F99-9BD9-A070FEA3AB6D",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:MyLibrary.xcodeproj",
+        "identifier" : "02439A172EAD677B00FC32AC",
+        "name" : "Unit Tests"
+      }
+    }
+  ],
+  "version" : 1
+}
